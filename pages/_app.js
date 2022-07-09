@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import { useState } from 'react'
 import Link from 'next/link'
-import { css } from '@emotion/css'
+import { css } from '@emotion/css';
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
