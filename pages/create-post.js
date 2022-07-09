@@ -22,3 +22,26 @@ const SimpleMDE = dynamic(
 )
 
 const initialState = { title: '', content: '' }
+
+const CreatePost = () => {
+
+    /* configure initial state to be used in the component */
+  const [post, setPost] = useState(initialState)
+  const [image, setImage] = useState(null)
+  const [loaded, setLoaded] = useState(false)
+
+  const fileRef = useRef(null)
+  const { title, content } = post
+  const router = useRouter()
+
+  useEffect(() => {
+    setTimeout(() => {
+      /* delay rendering buttons until dynamic import is complete */
+      setLoaded(true)
+    }, 500)
+  }, [])
+
+  function onChange(e) {
+    setPost(() => ({ ...post, [e.target.name]: e.target.value }))
+  }
+}
