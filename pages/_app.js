@@ -10,8 +10,11 @@ import { ownerAddress } from '../config'
 import 'easymde/dist/easymde.min.css'
 
 function MyApp({ Component, pageProps }) {
+
+    /* web3Modal configuration for enabling wallet access */
   const [account, setAccount] = useState(null)
-  
+    /* the connect function uses web3 modal to connect to the user's wallet */
+
   async function getWeb3Modal() {
     const web3Modal = new Web3Modal({
       network: 'mainnet',
