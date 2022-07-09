@@ -44,4 +44,24 @@ const CreatePost = () => {
   function onChange(e) {
     setPost(() => ({ ...post, [e.target.name]: e.target.value }))
   }
+
+  async function createNewPost() {   
+    /* saves post to ipfs then anchors to smart contract */
+    if (!title || !content) return
+    const hash = await savePostToIpfs()
+    await savePost(hash)
+    router.push(`/`)
+  }
+
+  async function savePostToIpfs() {
+    /* save post metadata to ipfs */
+    try {
+      const added = await client.add(JSON.stringify(post))
+      return added.path
+    } catch (err) {
+      console.log('error: ', err)
+    }
+  }
+
+  
 }
