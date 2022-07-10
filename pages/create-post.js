@@ -45,7 +45,7 @@ const CreatePost = () => {
     setPost(() => ({ ...post, [e.target.name]: e.target.value }))
   }
 
-  async function createNewPost() {   
+  const createNewPost = async () => {   
     /* saves post to ipfs then anchors to smart contract */
     if (!title || !content) return
     const hash = await savePostToIpfs()
@@ -53,7 +53,7 @@ const CreatePost = () => {
     router.push(`/`)
   }
 
-  async function savePostToIpfs() {
+  const savePostToIpfs = async () => {
     /* save post metadata to ipfs */
     try {
       const added = await client.add(JSON.stringify(post))
@@ -63,5 +63,37 @@ const CreatePost = () => {
     }
   }
 
-  
+  async function savePost(hash) {
+    /* anchor post to smart contract */
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
+      const contract = new ethers.Contract(contractAddress, Blog.abi, signer)
+      console.log('contract: ', contract)
+      try {
+        const val = await contract.createPost(post?.title, hash)
+        /* optional - wait for transaction to be confirmed before rerouting */
+        /* await provider.waitForTransaction(val.hash) */
+        console.log('val: ', val)
+      } catch (err) {
+        console.log('Error: ', err)
+      }
+    }    
+  }
+
+  const triggerOnChange = () => {
+    /* trigger handleFileChange handler of hidden file input */
+    fileRef.current.click()
+  }
+
+  const handleFileChange = async (e) => {
+    /* upload cover image to ipfs and save hash to state */
+    const uploadedFile = e.target.files[0]
+    if (!uploadedFile) return
+    const added = await client.add(uploadedFile)
+    setPost(state => ({ ...state, coverImage: added.path }))
+    setImage(uploadedFile)
+  }
+
+
 }
