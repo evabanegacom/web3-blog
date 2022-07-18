@@ -95,5 +95,91 @@ const CreatePost = () => {
     setImage(uploadedFile)
   }
 
-
+  return (
+    <div className={container}>
+      {
+        image && (
+          <img className={coverImageStyle} src={URL.createObjectURL(image)} />
+        )
+      }
+      <input
+        onChange={onChange}
+        name='title'
+        placeholder='Give it a title ...'
+        value={post.title}
+        className={titleStyle}
+      />
+      <SimpleMDE
+        className={mdEditor}
+        placeholder="What's on your mind?"
+        value={post.content}
+        onChange={value => setPost({ ...post, content: value })}
+      />
+      {
+        loaded && (
+          <>
+            <button
+              className={button}
+              type='button'
+              onClick={createNewPost}
+            >Publish</button>
+            <button
+              onClick={triggerOnChange}
+              className={button}
+            >Add cover image</button>
+          </>
+        )
+      }
+      <input
+        id='selectImage'
+        className={hiddenInput} 
+        type='file'
+        onChange={handleFileChange}
+        ref={fileRef}
+      />
+    </div>
+  )
 }
+
+const hiddenInput = css`
+  display: none;
+`
+
+const coverImageStyle = css`
+  max-width: 800px;
+`
+
+const mdEditor = css`
+  margin-top: 40px;
+`
+
+const titleStyle = css`
+  margin-top: 40px;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  font-size: 44px;
+  font-weight: 600;
+  &::placeholder {
+    color: #999999;
+  }
+`
+
+const container = css`
+  width: 800px;
+  margin: 0 auto;
+`
+
+const button = css`
+  background-color: #fafafa;
+  outline: none;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 18px;
+  padding: 16px 70px;
+  box-shadow: 7px 7px rgba(0, 0, 0, .1);
+`
+
+export default CreatePost;
